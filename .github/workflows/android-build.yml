@@ -1,69 +1,62 @@
 name: Build Kivy APK
 
+# Trigger manually using GitHub UI
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # This allows manual triggering from GitHub UI
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4  # Checkout repository contents
 
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.8'
+        python-version: '3.8'  # Specify the Python version used in your project
 
-    - name: Install Buildozer & dependencies
+    - name: Install Buildozer dependencies
       run: |
-        sudo dpkg --add-architecture i386
         sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          ccache \
-          git \
-          zip \
-          unzip \
-          openjdk-8-jdk \
-          python3-pip \
-          python3-setuptools \
-          python3-wheel \
-          python3-venv \
-          libncurses5 \
-          libncurses5-dev \
-          libstdc++6 \
-          lib32z1 \
-          libbz2-1.0 \
-          libz1:i386 \
-          libstdc++6:i386 \
-          zlib1g:i386
-
-        sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-8-openjdk-amd64/bin/java 1
-        sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/bin/java
-
-        export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-
+        sudo apt-get install -y python3-pip python3-setuptools python3-wheel
+        sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev
+        sudo apt-get install -y python3-venv
         pip install --upgrade pip
-        pip install cython buildozer
+        pip install cython
+        pip install buildozer  # Install buildozer to build the APK
 
-    - name: Initialize Buildozer (if needed)
+    - name: Install Android dependencies
       run: |
-        if [ ! -f buildozer.spec ]; then
-          buildozer init
-        fi
-
-    - name: Accept Android SDK licenses
+        sudo apt-get update
+        sudo apt-get install -y openjdk-8-jdk
+        sudo apt-get install -y git
+        sudo apt-get install -y libncurses5-dev libstdc++6 lib32z1 libbz2-1.0
+        
+    - name: Install AIDL
       run: |
-        yes | buildozer android update
+        sudo apt update
+        sudo apt install -y wget unzip
+        wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip -O commandlinetools.zip
+        unzip commandlinetools.zip -d $HOME/Android/Sdk/cmdline-tools
+        export ANDROID_HOME=$HOME/Android/Sdk
+        export PATH=$ANDROID_HOME/cmdline-tools/tools/bin:$PATH
+        export PATH=$ANDROID_HOME/platform-tools:$PATH
+        sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
+        sdkmanager "aidl"
+        
+    - name: Configure Buildozer
+      run: |
+        # Optional: You can modify buildozer.spec before running the build.
+        echo "Custom buildozer config adjustments go here if needed"
 
     - name: Build APK with Buildozer
       run: |
-        buildozer android debug
+        buildozer android debug  # This triggers Buildozer to start building the APK
 
-    - name: Upload APK
+    - name: Upload APK as artifact
       uses: actions/upload-artifact@v4
       with:
         name: galaxy-apk
-        path: bin/*.apk
+        path: bin/galaxy-debug.apk  # Adjust this to match where your APK is store
