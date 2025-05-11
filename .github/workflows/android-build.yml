@@ -53,13 +53,17 @@ jobs:
         export PATH=$ANDROID_HOME/platform-tools:$PATH
 
         # Verify sdkmanager is now available
+        echo "Checking sdkmanager path:"
         which sdkmanager
+        echo "Sdkmanager version:"
         sdkmanager --version
 
-        # Accept licenses and install tools
+        # Accept licenses and install the required components
+        echo "Accepting licenses and installing components..."
         yes | sdkmanager --licenses
+
+        # Install required tools and AIDL
         sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
-        sdkmanager "aidl"
         
     - name: Configure Buildozer
       run: |
