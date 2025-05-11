@@ -2,8 +2,8 @@ name: Build Kivy APK
 
 # Trigger manually using GitHub UI
 on:
-  workflow_dispatch:  # This allows manual triggering from GitHub UI
-
+  workflow_dispatch:  # This allows manual triggering from GitHub U
+  
 jobs:
   build:
     runs-on: ubuntu-latest  # Use the latest Ubuntu runner
@@ -38,17 +38,25 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y wget unzip
-        
         mkdir -p $HOME/Android/Sdk/cmdline-tools
+        
+        # Download and unzip
         wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip -O commandlinetools.zip
         unzip commandlinetools.zip -d $HOME/Android/Sdk/cmdline-tools
 
-         mv $HOME/Android/Sdk/cmdline-tools/cmdline-tools $HOME/Android/Sdk/cmdline-tools/latest
-        
+        # Rename to avoid nested cmdline-tools/cmdline-tools structure
+        mv $HOME/Android/Sdk/cmdline-tools/cmdline-tools $HOME/Android/Sdk/cmdline-tools/latest
+
+        # Export correct paths
         export ANDROID_HOME=$HOME/Android/Sdk
         export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
         export PATH=$ANDROID_HOME/platform-tools:$PATH
 
+        # Verify sdkmanager is now available
+        which sdkmanager
+        sdkmanager --version
+
+        # Accept licenses and install tools
         yes | sdkmanager --licenses
         sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
         sdkmanager "aidl"
