@@ -1,81 +1,47 @@
 name: Build Kivy APK
 
-# Trigger manually using GitHub UI
 on:
-  workflow_dispatch:  # This allows manual triggering from GitHub U
-  
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
 jobs:
   build:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
-    
+    runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4  # Checkout repository contents
+      uses: actions/checkout@v3
 
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.8'  # Specify the Python version used in your project
+        python-version: '3.10'
 
-    - name: Install Buildozer dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y python3-pip python3-setuptools python3-wheel
-        sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev
-        sudo apt-get install -y python3-venv
-        pip install --upgrade pip
-        pip install cython
-        pip install buildozer  # Install buildozer to build the APK
-
-    - name: Install Android dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y openjdk-8-jdk
-        sudo apt-get install -y git
-        sudo apt-get install -y libncurses5-dev libstdc++6 lib32z1 libbz2-1.0
-        
-    - name: Install AIDL
+    - name: Install system dependencies
       run: |
         sudo apt update
-        sudo apt install -y wget unzip
+        sudo apt install -y build-essential ccache git zip unzip \
+          openjdk-17-jdk python3-pip python3-setuptools \
+          python3-wheel python3-virtualenv libffi-dev \
+          libssl-dev libsqlite3-dev libjpeg-dev zlib1g-dev \
+          libncurses5 libandroid-sdk libstdc++6
 
-        mkdir -p ~/.buildozer/android/platform/android-sdk/cmdline-tools
-        cd ~/.buildozer/android/platform/android-sdk
-    
-        wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip -O cmdline-tools.zip
-        unzip cmdline-tools.zip -d cmdline-tools
-        mv cmdline-tools/cmdline-tools cmdline-tools/latest
-    
-        export ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
-        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/30.0.3:$PATH
-        
-        yes | sdkmanager --licenses
-        sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
-    
-        echo "AIDL location check:"
-        ls $ANDROID_HOME/build-tools/30.0.3/aidl || echo "aidl not found in build-tools"
-    
-        echo "PATH: $PATH"
-        which aidl || echo "aidl still not found"
-    
-        # Run aidl (safe)
-        if [[ -f "$ANDROID_HOME/build-tools/30.0.3/aidl" ]]; then
-          "$ANDROID_HOME/build-tools/30.0.3/aidl" --version || echo "aidl found but cannot run"
-        else
-          echo "AIDL binary is missing entirely from expected location"
-        fi
-        
-    - name: Configure Buildozer
+    - name: Install buildozer
       run: |
-        # Optional: You can modify buildozer.spec before running the build.
-        echo "Custom buildozer config adjustments go here if needed"
+        pip install --upgrade pip
+        pip install buildozer
 
-    - name: Build APK with Buildozer
+    - name: Initialize buildozer
       run: |
-        buildozer android debug  # This triggers Buildozer to start building the APK
+        buildozer init || echo "buildozer.spec already exists"
 
-    - name: Upload APK as artifact
+    - name: Build APK
+      run: |
+        buildozer android debug
+
+    - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: galaxy-apk
-        path: bin/galaxy-debug.apk  # Adjust this to match where your APK is store
+        name: galaxy-game-apk
+        path: bin/*.apk
