@@ -1,33 +1,49 @@
 name: Build Kivy APK
 
+# Trigger manually using GitHub UI
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+  workflow_dispatch:  # This allows manual triggering from GitHub UI
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2  # Checkout repository contents
 
-    - name: Set up dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y python3-pip zip unzip openjdk-17-jdk
-        python3 -m pip install --upgrade pip
-        pip install --user buildozer Cython
-
-    - name: Initialize Buildozer
-      run: |
-        export PATH="$HOME/.local/bin:$PATH"
-        buildozer android debug
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
+    - name: Set up Python
+      uses: actions/setup-python@v2
       with:
-        name: galaxy
-        path: bin/*.apk
+        python-version: '3.8'  # Specify the Python version used in your project
+
+    - name: Install Buildozer dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-pip python3-setuptools python3-wheel
+        sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev
+        sudo apt-get install -y python3-venv
+        pip install --upgrade pip
+        pip install buildozer  # Install buildozer to build the APK
+
+    - name: Install Android dependencies
+      run: |
+        sudo apt-get install -y openjdk-8-jdk  # Install the correct JDK
+        sudo apt-get install -y git  # Make sure Git is installed for Buildozer
+        sudo apt-get install -y libncurses5 libstdc++6 lib32z1 libbz2-1.0
+
+    - name: Configure Buildozer
+      run: |
+        # Optional: You can modify buildozer.spec before running the build.
+        echo "Custom buildozer config adjustments go here if needed"
+
+    - name: Build APK with Buildozer
+      run: |
+        buildozer android debug  # This triggers Buildozer to start building the APK
+
+    - name: Upload APK as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: galaxy-apk
+        path: bin/galaxy-debug.apk  # Adjust this to match where your APK is stored
 
