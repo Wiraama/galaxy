@@ -5,6 +5,8 @@ title = My Application
 
 # (str) Package name
 package.name = myapp
+android.api = 33
+android.build_tools = 33.0.2
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = org.test
