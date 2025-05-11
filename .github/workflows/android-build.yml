@@ -25,7 +25,7 @@ jobs:
           openjdk-17-jdk python3-pip python3-setuptools \
           python3-wheel python3-virtualenv libffi-dev \
           libssl-dev libsqlite3-dev libjpeg-dev zlib1g-dev \
-          libncurses5 libandroid-sdk libstdc++6
+          libncurses6 libstdc++6
 
     - name: Install buildozer
       run: |
