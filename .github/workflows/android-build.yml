@@ -38,16 +38,17 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y wget unzip
-        mkdir -p $HOME/Android/Sdk/cmdline-tools
+
+        mkdir -p ~/.buildozer/android/platform/android-sdk/cmdline-tools
+        cd ~/.buildozer/android/platform/android-sdk
     
-        wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip -O commandlinetools.zip
-        unzip commandlinetools.zip -d $HOME/Android/Sdk/cmdline-tools
+        wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip -O cmdline-tools.zip
+        unzip cmdline-tools.zip -d cmdline-tools
+        mv cmdline-tools/cmdline-tools cmdline-tools/latest
     
-        mv $HOME/Android/Sdk/cmdline-tools/cmdline-tools $HOME/Android/Sdk/cmdline-tools/latest
-    
-        export ANDROID_HOME=$HOME/Android/Sdk
+        export ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
         export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/30.0.3:$PATH
-    
+        
         yes | sdkmanager --licenses
         sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
     
