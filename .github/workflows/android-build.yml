@@ -39,42 +39,30 @@ jobs:
         sudo apt update
         sudo apt install -y wget unzip
         mkdir -p $HOME/Android/Sdk/cmdline-tools
-        
-        # Download and unzip
+    
         wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip -O commandlinetools.zip
         unzip commandlinetools.zip -d $HOME/Android/Sdk/cmdline-tools
-
-        # Rename to avoid nested cmdline-tools/cmdline-tools structure
+    
         mv $HOME/Android/Sdk/cmdline-tools/cmdline-tools $HOME/Android/Sdk/cmdline-tools/latest
-
-        # Export correct paths
+    
         export ANDROID_HOME=$HOME/Android/Sdk
-        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
-        export PATH=$ANDROID_HOME/platform-tools:$PATH
-
-        # Verify sdkmanager is now available
-        echo "Checking sdkmanager path:"
-        which sdkmanager
-        echo "Sdkmanager version:"
-        sdkmanager --version
-
-        # Accept licenses and install the required components
-        echo "Accepting licenses and installing components..."
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/30.0.3:$PATH
+    
         yes | sdkmanager --licenses
-
-        # Install required tools and AIDL
         sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
-
-        # Verify AIDL availability in build-tools
-        ls $ANDROID_HOME/build-tools/30.0.3/
-
-        # Check if AIDL is now installed
-        which aidl || echo "AIDL not found"
-        aidl --version
-
-        # Additional check to see the contents of build-tools
-        echo "Listing build-tools directory:"
-        ls $ANDROID_HOME/build-tools/30.0.3/
+    
+        echo "AIDL location check:"
+        ls $ANDROID_HOME/build-tools/30.0.3/aidl || echo "aidl not found in build-tools"
+    
+        echo "PATH: $PATH"
+        which aidl || echo "aidl still not found"
+    
+        # Run aidl (safe)
+        if [[ -f "$ANDROID_HOME/build-tools/30.0.3/aidl" ]]; then
+          "$ANDROID_HOME/build-tools/30.0.3/aidl" --version || echo "aidl found but cannot run"
+        else
+          echo "AIDL binary is missing entirely from expected location"
+        fi
         
     - name: Configure Buildozer
       run: |
