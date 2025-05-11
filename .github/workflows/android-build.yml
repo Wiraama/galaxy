@@ -64,6 +64,12 @@ jobs:
 
         # Install required tools and AIDL
         sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
+
+        # Verify AIDL availability in build-tools
+        ls $ANDROID_HOME/build-tools/30.0.3/
+
+        # Check if AIDL is now installed
+        which aidl
         
     - name: Configure Buildozer
       run: |
