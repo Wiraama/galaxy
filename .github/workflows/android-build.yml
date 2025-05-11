@@ -38,12 +38,16 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y wget unzip
+        
         mkdir -p $HOME/Android/Sdk/cmdline-tools
         wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip -O commandlinetools.zip
         unzip commandlinetools.zip -d $HOME/Android/Sdk/cmdline-tools
+        
         export ANDROID_HOME=$HOME/Android/Sdk
-        export PATH=$ANDROID_HOME/cmdline-tools/tools/bin:$PATH
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
         export PATH=$ANDROID_HOME/platform-tools:$PATH
+
+        yes | sdkmanager --licenses
         sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
         sdkmanager "aidl"
         
