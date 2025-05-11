@@ -7,6 +7,18 @@ title = My Application
 package.name = myapp
 android.api = 33
 android.build_tools = 33.0.2
+# (list) Permissions
+android.permissions = INTERNET
+
+# (str) Application entry point
+entrypoint = main.py
+
+# (list) Requirements (comma separated)
+requirements = python3,kivy
+
+# (bool) Indicate if the application should be fullscreen
+fullscreen = 1
+
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = org.test
@@ -76,7 +88,7 @@ osx.kivy_version = 1.9.1
 #
 
 # (bool) Indicate if the application should be fullscreen or not
-fullscreen = 0
+fullscreen = 1
 
 # (string) Presplash background color (for android toolchain)
 # Supported formats are: #RRGGBB #AARRGGBB or one of the following names:
