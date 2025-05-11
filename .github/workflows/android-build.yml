@@ -1,0 +1,33 @@
+name: Build Kivy APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y python3-pip zip unzip openjdk-17-jdk
+        python3 -m pip install --upgrade pip
+        pip install --user buildozer Cython
+
+    - name: Initialize Buildozer
+      run: |
+        export PATH="$HOME/.local/bin:$PATH"
+        buildozer android debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: galaxy
+        path: bin/*.apk
+
