@@ -24,6 +24,7 @@ jobs:
         sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev
         sudo apt-get install -y python3-venv
         pip install --upgrade pip
+        pip install cython
         pip install buildozer  # Install buildozer to build the APK
 
     - name: Install Android dependencies
