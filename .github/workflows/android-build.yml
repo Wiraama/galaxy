@@ -71,6 +71,10 @@ jobs:
         # Check if AIDL is now installed
         which aidl || echo "AIDL not found"
         aidl --version
+
+        # Additional check to see the contents of build-tools
+        echo "Listing build-tools directory:"
+        ls $ANDROID_HOME/build-tools/30.0.3/
         
     - name: Configure Buildozer
       run: |
