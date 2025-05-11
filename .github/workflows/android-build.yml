@@ -38,6 +38,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y wget unzip
+        mkdir -p $HOME/Android/Sdk/cmdline-tools
         wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip -O commandlinetools.zip
         unzip commandlinetools.zip -d $HOME/Android/Sdk/cmdline-tools
         export ANDROID_HOME=$HOME/Android/Sdk
