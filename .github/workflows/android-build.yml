@@ -70,6 +70,8 @@ jobs:
 
         # Check if AIDL is now installed
         which aidl
+        echo "Running AIDL to check its functionality..."
+        aidl --version
         
     - name: Configure Buildozer
       run: |
