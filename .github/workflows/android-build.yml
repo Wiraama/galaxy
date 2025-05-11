@@ -42,7 +42,7 @@ jobs:
         buildozer android debug  # This triggers Buildozer to start building the APK
 
     - name: Upload APK as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: galaxy-apk
         path: bin/galaxy-debug.apk  # Adjust this to match where your APK is stored
