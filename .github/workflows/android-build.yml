@@ -28,10 +28,10 @@ jobs:
 
     - name: Install Android dependencies
       run: |
-        sudo apt-get install -y openjdk-8-jdk  # Install the correct JDK
-        sudo apt-get install -y git  # Make sure Git is installed for Buildozer
-        sudo apt-get install -y libncurses5 libstdc++6 lib32z1 libbz2-1.0
-
+        sudo apt-get update
+        sudo apt-get install -y openjdk-8-jdk
+        sudo apt-get install -y git
+        sudo apt-get install -y libncurses5-dev libstdc++6 lib32z1 libbz2-1.0
     - name: Configure Buildozer
       run: |
         # Optional: You can modify buildozer.spec before running the build.
