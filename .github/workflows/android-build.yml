@@ -12,6 +12,9 @@ jobs:
       PATH: $HOME/Android/Sdk/cmdline-tools/latest/bin:$HOME/Android/Sdk/platform-tools:$HOME/Android/Sdk/build-tools/34.0.0:$PATH
 
     steps:
+    - name: Ensure tar is installed
+      run: sudo apt-get update && sudo apt-get install -y tar
+
     - name: Checkout code
       uses: actions/checkout@v4
 
