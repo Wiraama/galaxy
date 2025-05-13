@@ -38,23 +38,32 @@ jobs:
 
     - name: Set ANDROID_HOME and install SDK Command-line tools
       run: |
-        mkdir -p $HOME/.buildozer/android/platform
-        cd $HOME/.buildozer/android/platform
-        
+        # Create the necessary directory structure
+        mkdir -p "$HOME/.buildozer/android/platform"
+        cd "$HOME/.buildozer/android/platform"
+    
+        # Download and unzip command-line tools
         wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O cmdline-tools.zip
         unzip -q cmdline-tools.zip
-        
-        mkdir -p android-sdk/cmdline-tools
+    
+        # Set up cmdline-tools directory structure
+        mkdir -p android-sdk/cmdline-tools/latest
         mv cmdline-tools/* android-sdk/cmdline-tools/latest/
-        
-        sdkmanager "build-tools;36.0.0"
-        yes | sdkmanager --licenses
-        
-        yes | android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=android-sdk --licenses
-        android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=android-sdk "platform-tools" "build-tools;33.0.2" "platforms;android-33"
+    
+        # Export environment variables
+        export ANDROID_SDK_ROOT=$PWD/android-sdk
+        export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH
+    
+        # Accept licenses and install essential packages
+        yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
+        sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
+          "platform-tools" \
+          "build-tools;33.0.2" \
+          "platforms;android-33"
+    
       env:
         JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
-        
+
     - name: Build APK
       run: buildozer android debug
 
