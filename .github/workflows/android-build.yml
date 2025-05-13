@@ -57,6 +57,7 @@ jobs:
         export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH
     
         # Accept licenses and install essential packages
+        ln -s $PWD/android-sdk/cmdline-tools/latest $PWD/android-sdk/tools
         yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
         sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
           "platform-tools" \
