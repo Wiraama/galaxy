@@ -30,12 +30,20 @@ jobs:
 
     - name: Prepare libffi build
       run: |
-        set -e
-        dir=$(find $HOME -name autogen.sh -exec dirname {} \; | head -n 1)
+        echo "Searching for autogen.sh in home and repo..."
+        find $HOME -name autogen.sh
+        find . -name autogen.sh
+    
+        # Set the directory containing autogen.sh
+        dir=$(find . -name autogen.sh -exec dirname {} \; | head -n 1)
+    
+        # Check if the directory was found
         if [ -z "$dir" ]; then
           echo "autogen.sh not found"
           exit 1
         fi
+    
+        echo "Found autogen.sh in: $dir"
         cd "$dir"
         ./autogen.sh
         libtoolize --force --copy
@@ -43,6 +51,7 @@ jobs:
         autoconf
         automake --add-missing
         ./configure
+    
     - name: Export ANDROID_HOME and PATH
       run: |
         echo "ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk" >> $GITHUB_ENV
