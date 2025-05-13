@@ -30,9 +30,9 @@ jobs:
 
     - name: Prepare libffi build
       run: |
-        echo "Searching for autogen.sh in home and repo..."
-        find $HOME -name autogen.sh
-        find . -name autogen.sh
+        echo "Current directory: $(pwd)"
+        echo "Listing all files:"
+        find . -type f
     
         # Set the directory containing autogen.sh
         dir=$(find . -name autogen.sh -exec dirname {} \; | head -n 1)
