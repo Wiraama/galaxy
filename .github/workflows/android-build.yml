@@ -28,29 +28,21 @@ jobs:
         sudo apt-get install -y autoconf automake libtool
         sudo apt-get install -y libtool autotools-dev automake autoconf
 
-    - name: Prepare libffi build
+    - name: Install build tools
+      run: sudo apt-get update && sudo apt-get install -y autoconf automake libtool pkg-config
+
+    - name: Clone and build libffi
       run: |
-        echo "Current directory: $(pwd)"
-        echo "Listing all files:"
-        find . -type f
-    
-        # Set the directory containing autogen.sh
-        dir=$(find . -name autogen.sh -exec dirname {} \; | head -n 1)
-    
-        # Check if the directory was found
-        if [ -z "$dir" ]; then
-          echo "autogen.sh not found"
-          exit 1
-        fi
-    
-        echo "Found autogen.sh in: $dir"
-        cd "$dir"
+        git clone https://github.com/libffi/libffi.git
+        cd libffi
+        git checkout v3.4.4
         ./autogen.sh
         libtoolize --force --copy
         aclocal
         autoconf
         automake --add-missing
         ./configure
+        make
     
     - name: Export ANDROID_HOME and PATH
       run: |
