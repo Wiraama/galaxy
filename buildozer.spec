@@ -13,10 +13,6 @@ android.permissions = INTERNET
 # (str) Application entry point
 entrypoint = main.py
 
-# (bool) Indicate if the application should be fullscreen
-fullscreen = 1
-
-
 # (str) Package domain (needed for android/ios packaging)
 package.domain = org.test
 
