@@ -26,7 +26,23 @@ jobs:
           libssl-dev libsqlite3-dev libjpeg-dev zlib1g-dev \
           libncurses6 libstdc++6
         sudo apt-get install -y autoconf automake libtool
+        sudo apt-get install -y libtool autotools-dev automake autoconf
 
+    - name: Prepare libffi build
+      run: |
+        set -e
+        dir=$(find $HOME -name autogen.sh -exec dirname {} \; | head -n 1)
+        if [ -z "$dir" ]; then
+          echo "autogen.sh not found"
+          exit 1
+        fi
+        cd "$dir"
+        ./autogen.sh
+        libtoolize --force --copy
+        aclocal
+        autoconf
+        automake --add-missing
+        ./configure
     - name: Export ANDROID_HOME and PATH
       run: |
         echo "ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk" >> $GITHUB_ENV
