@@ -46,8 +46,10 @@ jobs:
         wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O cmdline-tools.zip
         unzip -q cmdline-tools.zip
     
-        # Set up cmdline-tools directory structure
+        
         mkdir -p android-sdk/cmdline-tools/latest
+    
+        # Move extracted files into the 'latest' directory
         mv cmdline-tools/* android-sdk/cmdline-tools/latest/
     
         # Export environment variables
