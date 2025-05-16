@@ -1,10 +1,11 @@
 [app]
 
 # (str) Title of your application
-title = My Application
+title = Galaxy
 android.sdk_path = /home/codespace/.buildozer/android/platform/android-sdk
+android.ndk_path = /home/codespace/.buildozer/android/platform/android-ndk-r25b
 # (str) Package name
-package.name = myapp
+package.name = galaxy
 android.api = 33
 android.build_tools = 33.0.2
 # (list) Permissions

@@ -11,7 +11,7 @@
  */
 
 #define PLATFORM "platform: android-arm"
-#define DATE "built on: Fri May 16 02:49:29 2025 UTC"
+#define DATE "built on: Fri May 16 08:40:08 2025 UTC"
 
 /*
  * Generate compiler_flags as an array of individual characters. This is a
@@ -48,7 +48,7 @@ static const char compiler_flags[] = {
     'a','t','f','o','r','m','/','b','u','i','l','d','-','a','r','m',
     '6','4','-','v','8','a','_','a','r','m','e','a','b','i','-','v',
     '7','a','/','b','u','i','l','d','/','p','y','t','h','o','n','-',
-    'i','n','s','t','a','l','l','s','/','m','y','a','p','p','/','a',
-    'r','m','e','a','b','i','-','v','7','a','/','i','n','c','l','u',
-    'd','e','/','p','y','t','h','o','n','3','.','1','\0'
+    'i','n','s','t','a','l','l','s','/','g','a','l','a','x','y','/',
+    'a','r','m','e','a','b','i','-','v','7','a','/','i','n','c','l',
+    'u','d','e','/','p','y','t','h','o','n','3','.','1','\0'
 };
