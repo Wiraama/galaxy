@@ -2,7 +2,7 @@
 
 # (str) Title of your application
 title = My Application
-
+android.sdk_path = /home/codespace/.buildozer/android/platform/android-sdk
 # (str) Package name
 package.name = myapp
 android.api = 33
