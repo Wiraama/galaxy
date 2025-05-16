@@ -1,3 +1,5 @@
+from kivy.config import Config
+Config.set('kivy', 'window_icon', 'images/icon.png')
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.app import App
 from kivy.uix.widget import Widget

@@ -1,0 +1,38 @@
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y \
+    python3-pip \
+    python3-setuptools \
+    git \
+    zip \
+    unzip \
+    openjdk-17-jdk \
+    libncurses5 \
+    libffi-dev \
+    libssl-dev \
+    libsqlite3-dev \
+    zlib1g-dev \
+    libjpeg-dev \
+    build-essential \
+    ccache \
+    libncurses5-dev \
+    libncursesw5-dev \
+    libtinfo5 \
+    libgl1-mesa-dev
+sudo apt install -y openjdk-17-jdk zip unzip libncurses5 libtinfo5
+pip3 install --upgrade pip
+pip3 install --user Cython==0.29.36
+pip3 install --user buildozer
+echo 'export PATH=$PATH:$HOME/.local/bin' >> ~/.bashrc
+source ~/.bashrc
+pip3 install --user python-for-android
+apt-get update && apt-get install -y libtool
+sudo apt install python3-pip python3-setuptools git zip unzip openjdk-17-jdk \
+libncurses5 libffi-dev libssl-dev libsqlite3-dev zlib1g-dev libjpeg-dev \
+build-essential ccache libncurses5-dev libncursesw5-dev libtinfo5 libgl1-mesa-dev
+openjdk-17-jdk
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export PATH=$JAVA_HOME/bin:$PATH
+export JAVA_HOME='/usr/local/sdkman/candidates/java/current'
+sdk install java 17.0.8-tem
+sdk use java 17.0.8-tem
+buildozer android debug
